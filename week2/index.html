@@ -122,7 +122,7 @@ Null values cause issues with 'math'
 
 ```sql
 3 + null; -- null
-(25 * 3) + 4; -- null
+(25 * 3) + 4; -- 79
 (null * 3) + 4; -- null
 (25 * 3) + null; -- null
 
@@ -143,7 +143,7 @@ Null values cause issues with 'math'
 ---
 # Structure Related Terms
 
-* <strong>Table</strong> - In the relational model, data are stored in <i>relations</i>, which are perceived by the user as <i>tables</i>.
+* <strong>Table</strong> - In the relational model, data is stored in <i>relations</i>, which are perceived by the user as <i>tables</i>.
 * <strong>Tuples</strong> - Each row/record in a database is a <i>tuple</i>
 * <strong>Attributes</strong> - Each record has a set of values/properties stored as <i>attributes</i>.
 <hr/>
@@ -159,7 +159,7 @@ Null values cause issues with 'math'
 * Tables are the chief structure in the database and each table always represents a single, specific <i>subject</i>
 * The logical order of records and fields within a table is of absolutely no importance.  
 * Every table contains at least one 'field' - known as a primary key - that uniquely identifies each of its records.
-* Data can exist independantly of the way it is physically stored in the computer because of the last two characteristics.
+* Data can exist independant of the way it is physically stored in the computer because of the last two characteristics.
 
 Primary  keys are typically an 'ID' in the database:
 * ClientID, PatientID, etc
@@ -167,9 +167,9 @@ Primary  keys are typically an 'ID' in the database:
 ---
 # Field
 
-* A <i>field</i> (known as an <i>attribute</i> in relational database theory) is the smallest structure in the database and it represents a characteristic of the subjcet of the table to which it belongs.
-* Fields are the structures that acutally store data.
-* Every field in a <i>properly designed</i> database contains one and only one value and its name will identify the type of value if holds.
+* A <i>field</i> (known as an <i>attribute</i> in relational database theory) is the smallest structure in the database and it represents a characteristic of the subject of the table to which it belongs.
+* Fields are the structures that actually store data.
+* Every field in a <i>properly designed</i> database contains one and only one value and its name should be descriptive enough to identify the type of value it holds.
 
 ???
 
@@ -185,9 +185,9 @@ When you see fields like FirstName, LastName, City, State Zipcode, you know exac
 ---
 # Record
 
-* Record - aka tuple, in relational theory, respresents a unique instance of the subjejct of a tbale.
+* Record - aka tuple, in relational theory, respresents a unique instance of the subject of a table.
 
-Book example:  Each record in the 'clients' table will represent a 'client' in real life.  Each record in the table has a unique primary key 'ClientID
+Book example:  Each record in the 'clients' table will represent a 'client' in real life.  Each record in the table has a unique primary key 'ClientID'
 
 ---
 # View
@@ -201,6 +201,10 @@ Three reasons views are important
 * Can be used to prevent certain users access to core tables
 * Can be used to implement data integrity.  Known as a 'validation view'
 
+<img src="views.png" width="40%"/>
+
+---
+
 <img src="views.png" width="80%"/>
 
 ---
@@ -208,7 +212,7 @@ Three reasons views are important
 
 * Primary Key - field or group of fields that uniquely identify each record within a table
  * Can be one or more fields
-* Primary key <i>values</i> identify a specific record throughout the entire database
+* Primary key <i>values</i> identify a specific record throughout the entire database/table
 * Primary key <i>field</i> identifies a given table throughout the entire database
 * Enforces table-level integrity and helps establish relationships with other tables in the database.
 
