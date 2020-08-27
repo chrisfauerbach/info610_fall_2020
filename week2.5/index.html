@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>INFO 610 - Week 2.5</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+/* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+/* Two-column layout */
+      .left-column-half {
+        color: #777;
+        width: 50%;
+        height: 92%;
+        float: left;
+      }
+      .right-column-half {
+        width: 50%;
+        float: right;
+        padding-top: 1em;
+        line-height: .9em;
+      }
+
+    table, td, th {
+        border: 1px solid black;
+        font-size: .9em;
+    }
+
+
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+# INFO 610 Fall 2020
+
+<div style="text-align:center;font-size: 1.5;line-height:1.8em;">Week 2.5</div>
+
+---
+# (more) Terminology - Chapter 3
+
+---
+# Relationship Terms
+
+* Relationships exist between two tables when you can, in some way, associate the records from the first table with those of the second.
+* Relationships are established via Primary and Foreign keys
+* Alternatively, relationships can be built using a 'linking' or 'associative' table
+* Relationships allow you to:
+ * Enable multable views
+ * Enforce data integrity
+ * Eliminate duplicate data
+
+---
+# Attempt to draw this out
+LIVE!
+
+* One-to-one relationship
+ * Two ways!
+ * Primary table 'knows' about related table
+ * Primary table DOESNT know about related table
+
+* One-to-many
+* Many-to-many
+
+---
+# Types of Participation
+
+TABLE_A , TABLE_B
+
+## Mandatory or Optional
+
+* Mandatory - If data must be in A before B, A is mandatory
+* Optional - If data does NOT have to be in A before B, A is optional
+
+---
+# Integrity - Fields
+
+* Fields are defined by three things:
+ * General - name, description and which table it belongs to
+ * Physical - Data type, length and display format
+ * Logical - required range, range values, default value
+
+---
+# Data Integrity
+
+Validity, Consistency, Accuracy
+
+* Table level integrity - ensures no duplicate records in a table and all required fields are present
+* Field level integrity - Ensures that the structure of every field is sound
+* Relationship level integrity - Ensures data in related tables is sound and the data is synchronized after a transaction.
+ * (Referential integrity)
+* Business Rules - Restrictions or limitations on certain aspects of a database based on your domain/business/requirements
+ * Value ranges
+ * Date ranges
+ * 'length of password'
+ * User can only own 'three' cars
+ * etc
+
+---
+
+
+---
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
