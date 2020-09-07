@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>INFO 610 - Week 4</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+/* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+/* Two-column layout */
+      .left-column-half {
+        color: #777;
+        width: 50%;
+        height: 92%;
+        float: left;
+      }
+      .right-column-half {
+        width: 50%;
+        float: right;
+        padding-top: 1em;
+        line-height: .9em;
+      }
+
+    table, td, th {
+        border: 1px solid black;
+        font-size: .9em;
+    }
+
+
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+# INFO 610 Fall 2020
+
+<div style="text-align:center;font-size: 1.5;line-height:1.8em;">Week 4</div>
+
+---
+# Finally, some Technology!
+
+At this point, we'll be interacting with our postgresql database.
+
+Whether you're running it in Docker or have natively installed, that's OK.  
+
+I'll start with a few 'command line' interactions with Postgres, but, primarily I will use SQL Developer.
+
+https://www.oracle.com/database/technologies/appdev/sqldeveloper-landing.html
+
+https://jdbc.postgresql.org/
+
+---
+# Remove all stopped docker containers
+
+```bash
+
+$ docker rm $(docker ps -a -q)
+
+```
+---
+# Run and Interact
+
+```bash
+$ # Remember , dont' type the $ $ $ $ $ 
+$ docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword  postgres
+
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "en_US.utf8".
+The default database encoding has accordingly been set to "UTF8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+.
+.
+.
+
+```
+---
+# psql
+
+In a new terminal (since I didn't run postgres docker as a daemon)
+
+```bash
+$ docker exec -ti some-postgres psql -U postgres
+psql (11.5 (Debian 11.5-1.pgdg90+1))
+Type "help" for help.
+
+postgres=# SELECT datname, datdba, encoding FROM pg_catalog.pg_database;
+  datname  | datdba | encoding
+-----------+--------+----------
+ postgres  |     10 |        6
+ template1 |     10 |        6
+ template0 |     10 |        6
+(3 rows)
+
+```
+---
+# Now we can start
+
+Let's create some tables.
+
+```bash
+postgres=# CREATE TABLE customer ( customer_id SERIAL );
+CREATE TABLE
+postgres=# \dt
+          List of relations
+ Schema |   Name   | Type  |  Owner
+--------+----------+-------+----------
+ public | customer | table | postgres
+(1 row)
+
+postgres=# SELECT * FROM customer;
+ customer_id
+-------------
+(0 rows)
+
+```
+---
+# CREATE TABLE
+
+```sql
+DROP TABLE IF EXISTS agents;
+
+
+CREATE TABLE agents
+(agent_id int primary key,
+agent_first_name varchar(255),
+agent_last_name varchar(255),
+date_of_hire date,
+agent_home_phone varchar(255));
+```
+* In my scripts, I start with dropping the table so I can run it over and over.
+* If the table DOESN'T exist 'DROP TABLE agents' would fail.
+* IF EXISTS protects against that failure
+* 'agent_id' is an integer, primary key.
+* These columns use two data types
+  * varchar, date
+---
+# INSERT
+```sql
+
+INSERT INTO agents
+(agent_id, agent_first_name, agent_last_name, date_of_hire, agent_home_phone)
+VALUES (100, 'Mike', 'Hernandez', '05/16/2011', '553-3992'),
+(101, 'Greg', 'Johnson', '10/15/2011', '790-3992'),
+(102, 'Katherine', 'Ehrlich', '03/01/2012', '551-4993');
+
+```
+* Page 14 of design book shows us the data we'll insert
+* This statement INSERTS INTO the 'agents' table
+* The values in the tuples will be placed into the columents (agent_id, agent_first_name, etc)
+* the 'values' provide a list of 'tuples' (rows)
+
+---
+# Foreign Key
+
+```sql
+CREATE TABLE clients(
+        client_id serial PRIMARY KEY,
+        agent_id int NOT null REFERENCES agents (agent_id),
+        first_name varchar(255),
+        last_name varchar(255)
+);
+```
+
+* REFERENCES sets up the foreign key
+* the 'agent_id' field is a foreign key to 'agents (agent_id)'
+
+---
+# Failed Insert / Foreign Key
+
+```sql
+
+INSERT INTO clients
+(client_id, agent_id, client_first_name, client_last_name, client_home_phone)
+VALUES (9000, 1, 'ThisIsA', 'Failure', '804 555 1212');
+```
+* We never put an agent in the 'agents' table with an 'agent_id' of 1
+* When we execute this statement, we get an error:
+
+```
+Error report -
+SQL Error: ERROR: insert or update on table "clients" violates foreign key constraint "clients_agent_id_fkey"
+  Detail: Key (agent_id)=(1) is not present in table "agents".
+```
+
+* We have violated the foreign key constraint.
+
+---
+# Sequence
+
+In PostgreSQL, a sequence is a special kind of database object that generates a sequence of integers. A sequence is often used as a primary key column. Similar to the AUTO_INCREMENT concept in MySQL.
+
+When creating a new table, the sequence is created through the SERIAL pseudo-type as follows:
+
+```sql
+CREATE TABLE table_name(
+    id SERIAL
+);
+```
+By assigning the SERIAL pseudo-type to the id column, PostgreSQL will perform the following:
+
+* Creates a sequence object and set the next value generated by the sequence as the default value for the column.
+* Adds the NOT NULL constraint to the column because a sequence always generates an integer, which is a non-null value.
+
+
+---
+# Serial Types
+* smallserial / <strong>serial</strong> / bigserial
+* Auto-incrementing integer values
+
+|Name|Storage Size|Description|Range|
+|--|--|--|--|
+|smallint|2 bytes|small-range integer|-32768 to +32767|
+|integer|4 bytes|typical choice for integer|-2147483648 to +2147483647|
+|bigint|8 bytes|large-range integer|-9223372036854775808 to +9223372036854775807|
+|decimal|variable|user-specified precision, exact|up to 131072 digits before the decimal point; up to 16383 digits after the decimal point|
+|numeric|variable|user-specified precision, exact|up to 131072 digits before the decimal point; up to 16383 digits after the decimal point|
+|real|4 bytes|variable-precision, inexact|6 decimal digits precision|
+|double precision|8 bytes|variable-precision, inexact|15 decimal digits precision|
+|smallserial|2 bytes|small autoincrementing integer|1 to 32767|
+|serial|4 bytes|autoincrementing integer|1 to 2147483647|
+|bigserial|8 bytes|large autoincrementing integer|1 to 9223372036854775807|
+
+---
+# How to create and use a serial field
+
+It is important to note that the SERIAL does not implicitly create an index on the column or make the column as the primary key column. However, this can be done easily by specifying the PRIMARY KEY constraint for the SERIAL column.
+
+
+```sql
+CREATE TABLE fruits( id SERIAL PRIMARY KEY, name VARCHAR NOT NULL );
+
+INSERT INTO fruits (name) values ('apple'), ('pear'), ('pawpaw'),('orange');
+
+SELECT * FROM fruits;
+
+```
+|ID|Name|
+|--|--|
+|1|apple|
+|2|pear|
+|3|pawpaw|
+|4|orange|
+
+
+---
+#  What does SERIAL really do?
+
+```sql
+
+CREATE SEQUENCE table_name_id_seq;
+
+CREATE TABLE table_name (
+    id integer NOT NULL DEFAULT nextval('table_name_id_seq')
+);
+
+ALTER SEQUENCE table_name_id_seq
+OWNED BY table_name.id;
+
+```
+
+---
+# Write out some more SQL
+
+<a href="class.sql">class.sql</a> for reference after class
+
+
+---
+#
+
+
+---
+#
+
+
+---
+#
+
+
+---
+#
+
+
+
+---
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
