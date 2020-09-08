@@ -87,7 +87,7 @@ $ docker rm $(docker ps -a -q)
 
 ```bash
 $ # Remember , dont' type the $ $ $ $ $ 
-$ docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword  postgres
+$ docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword  postgres
 
 The files belonging to this database system will be owned by user "postgres".
 This user must also own the server process.
@@ -291,6 +291,10 @@ OWNED BY table_name.id;
 # Write out some more SQL
 
 <a href="class.sql">class.sql</a> for reference after class
+<br/>
+<br/>
+<br/>
+<a href="inclass.sql">inclass.sql</a> that was written during class
 
 
 ---
