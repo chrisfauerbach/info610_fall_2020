@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>INFO 610 - Week 6</title>
+    <title>INFO 610 - Week 6.5</title>
     <meta charset="utf-8">
     <style>
       @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
@@ -60,13 +60,137 @@
 
 # 
 
-<div style="text-align:center;font-size: 3em;line-height:3em;"> INFO 610 Fall 2019 </div>
-<div style="text-align:center;font-size: 1.5em;line-height:1.8em;">Week 6</div>
-<div style="text-align:center;font-size: 1em;line-height:1.8em;">More on the SQL</div>
-<div style="text-align:center;font-size: 1.9em;line-height:3em;">chrisfauerbach.github.io/info610_fall_2019/</div>
+<div style="text-align:center;font-size: 3em;line-height:3em;"> INFO 610 Fall 2020 </div>
+<div style="text-align:center;font-size: 1.5em;line-height:1.8em;">Week 6.5</div>
+<div style="text-align:center;font-size: 1em;line-height:1.8em;">Project Definition</div>
+<div style="text-align:center;font-size: 1.9em;line-height:3em;">chrisfauerbach.github.io/info610_fall_2020/</div>
 ---
 
+# Project Ideas
+
+---
+
+# INVENTORY CONTROL MANAGEMENT DATABASE PROJECT
+Design goals: maintain a proper variety of required items, increase inventory turnover, reduce and maintain optimize inventory and safety stock levels, obtain low raw material prices, reduce storage cost, reduce insurance cost, reduce taxes
+
+
+---
+
+# STUDENT RECORD KEEPING SYSTEM DATABASE PROJECT
+Design goals: a student file that contains the information about student, a stream file, a marks file, a fee file, concession/scholarship etc.
+
+---
+#  ONLINE RETAIL APPLICATION DATABASE PROJECT
+A customer can register to purchase an item. The customer will provide bank account number and bank name (can have multiple account number). After registration, each customer will have a unique customerid, userid and password. A customer can purchase one or more item in different quantities. The items can of different classes based on their prices. Based on the quantity, the price of the item and discount (if any) on the purchased items, the bill will be generated. A bank account is required to settle the bill. The items can be ordered to one or more suppliers
+---
+#   COLLEGE DATABASE DATABASE PROJECT
+A college contains many departments. Each department can offer any number of courses. Many instructors can work in a department, but an instructor can work only in one department. For each department, there is a head, and an instructor can be head of only one department. Each instructor can take any number of courses, and a course can be taken by only one instructor. A student can enroll for any number of courses and each course can have any number of students.
+---
+# RAILWAY SYSTEM DATABASE PROJECT
+A railway system, which needs to model the following:
+ Stations
+ Tracks, connecting stations. You can assume for simplicity that only one track exists between any two stations. All the tracks put together to form a graph.
+ Trains, with an ID and a name
+ Train schedules recording what time a train passes through each station on its route. 
+You can assume for simplicity that each train reaches its destination on the same day and that every train runs every day. Also for simplicity, assume that for each train, for each station on its route,  you store
+ Time in, 
+ Timeout (same as time in if it does not stop)
+ A sequence number so the stations in the route of a train can be ordered by sequence number.
+ Passenger booking consisting of train, date, from-station, to station, coach, seat and passenger name.
+---
+# HOSPITAL MANAGEMENT SYSTEM DATABASE PROJECT
+A patient will have unique Patient ID.  Full description about the patient about personal detail and phone number, and then Disease and what treatment is going on. The doctor will handle patients, One doctor can Treat more than 1 patient. Also, each doctor will have unique ID. Doctor and Patients will be related. Patients can be admitted to hospital. So different room numbers will be there, also rooms for Operation Theaters and ICU.  There are some nurses, and ward boys for the maintenance of hospital and for patient take care.  Based upon the number of days and treatment bill will be generated.
+Check Hospital Management System project in PHP
+---
+# LIBRARY MANAGEMENT SYSTEM DATABASE PROJECT
+A student and faculty can issue books. Different limits for the number of books a student and teacher can issue. Also, the number of days will be distinct in the case of students and teachers for issue any book.  Each book will have different ID. Also, each book of the same name and same author (but the number of copies) will have different ID. Entry of all the book will be done, who issue that book and when and also duration. Detail of Fine(when the book is not returned at a time) is also stored.
+---
+# PAYROLL MANAGEMENT SYSTEM DATABASE PROJECT
+There will entry (Unique ID) of all the employee of any Organization. According to the date of joining and date up to which salary is created, Number of days will be entered.  Basic pay will be defined according to the post of employee and department. Then component like DA, HRA, medical allowance, Arrears will be added, and Charges of Hostel/ Bus, Security, welfare fund and other will be deducted. The number of leaves taken by the employee.
+
+---
+# HEALTHCARE ORGANIZATION DATABASE PROJECT
+This organization provides the following functionalities
+Emergency Care 24x7
+Support Groups
+Support and Help Through calls
+Any new Patient is first registered in their database before meeting the doctor. The Doctor can update the data related to the patient upon diagnosis (Including the disease diagnosed and prescription). This organization also provides rooms facility for admitting the patient who is critical. Apart from doctors, this organization has nurses and ward boy. Each nurse and ward boy is assigned to a doctor. Also, they can be assigned to patients (to take care of them). The bill is paid by the patient with cash and E-banking. Record of each payment made is also maintained by the organization. The record of each call received to provide help and support to its existing person is also maintained.
+
+---
+# RESTAURANT MANAGEMENT DATABASE PROJECT
+The restaurant maintains the catalog for the list of food and beverage items that it provides.
+Apart from providing food facility at their own premises, the restaurant takes orders online through their site. Orders on the phone are also entertained.
+To deliver the orders, we have delivery boys. Each delivery boy is assigned to the specific area code. The delivery boy cannot deliver outside the area which is not assigned to the delivery boy (for every delivery boy there can be a single area assigned to that delivery boy).
+The customer record is maintained so that premium customer can be awarded discounts.
+---
+
+# DESIGN A SCENARIO AND AN ER DIAGRAM FOR AN IT TRAINING GROUP DATABASE PROJECT
+It will meet the information needs of its training program. Clearly indicate the entities, relationships, and the key constraints. The description of the environment is as follows:
+
+The company has 10 instructors and can handle up to 100 trainees for each training session.
+The company offers 4 Advanced technology courses, each of which is taught by a team of 4 or more instructors Each instructor is assigned to a maximum of two teaching teams or may be assigned to do research Each trainee undertakes one Advanced technology course per training session.
+
+---
+# BLOOD DONATION SYSTEM DATABASE PROJECT
+ A system in which data of Patient, data of donor, data of blood bank would be saved and will be interrelation with each other
+
+DATA OF PATIENT – Patient Name, Patient Id, Patient Blood Group, Patent Disease
+
+DATA OF DONOR – Donar Name, Donar Id, Donar Bood Group, Donar Medical report, Donar Address, Donar Contact number
+
+DATA OF BLOOD BANK – Blood Bank Name, Blood Bank Address, Blood bank Donors name, Blood Bank Contact Number, Blood Bank Address
+
+
+---
+# ART GALLERY MANAGEMENT DATABASE PROJECT
+Design an E-R Diagram for an Art Gallery. Gallery keeps information about "Artist" their Name, Birthplace, Age & Style of Art about "Art Work," Artist, the year it was made, Unique title, Type of art & Prices must be stored. The piece of artwork is classified into various kind like Poetess, Work of the 19th century still life, etc. Gallery keeps information about Customers as their Unique name, Address, Total amount of Dollar, they spent on Gallery and liking of Customers.
+
+---
+# HOTEL MANAGEMENT SYSTEM DATABASE PROJECT
+A hotel is a hive of numerous operations such as front office, booking, and reservation, banquet, finance, HR, inventory, material management, quality management, security, energy management, housekeeping, CRM and more.  The hotel has some rooms, and these rooms are of different categories. By room category, each room has the different price. A hotel has some employees to manage the services provided to customers. The customer can book the room either online or by cash payment at the hotel. The customer record is stored in hotel database which contains customer identity, his address, check in time, check out time, etc. hotel provides food and beverages to their customers and generates the bill for this at the time of their check out.
+
+
+---
+# SCHOOL MANAGEMENT SYSTEM DATABASE PROJECT
+Design a database to maintain information about school staff and students satisfying the following properties:
+    Staff will have their id, name, and classes they are teaching
+    The student will be having the name, roll no, section, class
+    Another table containing the section, subject and teacher information
+    Next will contain fee information for students
+    One contains salary information for teachers
+    Rooms are assigned to classes keeping in mind that there is no time clash of same room or lab, students cannot be entered in more than one section,  no student should be there who have not paid fees up to a particular date.
+---
+
+# WHOLESALE MANAGEMENT SYSTEM DATABASE PROJECT
+
+Maintain the details of stock like their id, name, quantity
+Maintain the details of buyers from which manager has to buy the stock like buyer id, name, address, stock id to be bought
+Details of customers i.e. name, address, id
+Defaulters list of customers who have not paid their pending amount
+List of payment paid or pending
+The stock that is to buy if quantity goes less than a particular amount.
+Profit calculation for a month.
+Quantity cannot be sold to a customer if the required amount is not present in stock and date of delivery should be maintained up to which stock can be provided.
+
+---
+
+# SALARY MANAGEMENT SYSTEM DATABASE PROJECT
+Employee list to be maintained having id, name, designation, experience
+Salary details having employee id, current salary
+Salary in hand details having employee id, CTC salary, pf deduction or any other deduction and net salary to be given and also maintain details of total savings of employee
+Salary increment to be given by next year if any depending upon constraints
+Deduction in monthly salary if any depending upon any discrepancy in work and amount to be deducted.
+ 
+---
+
+# ATM MANAGEMENT SYSTEM DATABASE PROJECT
+Manage customers and transactions.   Make sure you can withdraw, deposit and query your balance.  Keep track of transactions.
+
+
+
+---
 # PICK A PROJECT
+
 * Come up with a project definition.  Less than two page writeup of what will happen in your application/database
 * Design database tables, ER Diagram, Relationships (one to one, one to many, many to many), name your tables
 * Detail Design - All columns, data types, primary keys, foreign keys
@@ -77,218 +201,48 @@
 
 
 ---
-# WHERE clause
+# More
 
-Chapter 5, Pg 179
+This will be completed and due by November 11th, 11:59:59 PM Eastern.
 
-* Used to filter data in a result set
+That's just about a bullet a week.  I will have an 'assigment' for each week in Canvas, but they will share a due date of November 11th, 11:59:59PM.
 
-* Filtering is specified after the `WHERE` keyword
-
-* If rows MATCH the `WHERE` clause, they are returned
-
-```sql
-SELECT [COLUMNS] FROM [TABLE(s)] WHERE [CONDITION(s)]
-```
-
-e.g.
-
-```sql
-SELECT * FROM EMPLOYEES WHERE EMPLOYEE_ID = 4
-```
-
+Budget your time!
 ---
-# WHERE examples
+# Mid term exam
 
-```sql 
-SELECT * FROM car_model WHERE make='Ford';
+Midterm will be held next Thursday during class time, October 1st, 2020.
 
-SELECT * FROM car WHERE mileage < 250000;
+All material up to this point is fair game.
 
-SELECT * FROM car WHERE number_of_doors > 3 AND number_of_owners <= 2 ;
-```
+Questions will be a combination of true/false, multiple choice, multiple option, SQL and essay.
 
-Can perform math, watch out for divide by zero
+Exam will take place during class time.
 
-```sql
-SELECT * FROM t WHERE b / a > 0.5 and a<>0;
-```
+* SELECT, INSERT, CREATE, UPDATE
+* WHERE, GROUP BY, ORDER BY, HAVING
+* Data types, serial
+* PRIMARY KEY, FOREIGN KEY
+* one-to-one, one-to-many, many-to-many
+* DISTINCT
+* Inner and left outer joins
+* Aggregate functions (min, max, average, count)
+* Table/Relation, Row/Tuple, Attribute, Field
 
-* <, <=, >, >=, <>
-* BETWEEN ( x BETWEEN a AND b ) ( inclusive, x >= a AND x <= b )
-* OVERLAPS (comparing two dates ranges)
-  * (date '2018-10-25', date '2018-10-31') OVERLAPS  (date '2018-10-25', date '2018-11-15')
+## Tuesday, Sept 29th will be review evening.  Bring your questions.
 ---
-
-# Grouping
-
-The GROUP BY Statement in SQL is used to arrange identical data into groups with the help of some functions. i.e if a particular column has same values in different rows then it will arrange these rows in a group
-
-*  https://www.geeksforgeeks.org/sql-group-by/
-
-```sql
-SELECT column1, function_name(column2)
-FROM table_name
-WHERE condition
-GROUP BY column1, column2
-ORDER BY column1, column2;
-
-function_name: Name of the function used for example, SUM() , AVG().
-table_name: Name of the table.
-condition: Condition used.
-```
----
-# Example
-
-
-|make|model|year|price|
-|--|--|--|
-|Ford|Flex|2012|11,234|
-|Ford|Flex|2013|12,222|
-|Ford|Flex|2012|14,999|
-|BMW|330i|2012|17,999|
-|BMW|330i|2013|18,999|
-|...|...|...|...|
-
-```sql
-SELECT make, model, count(*)
-FROM car_for_sale
-GROUP BY make, model
-```
-
-|Make|Model|Count(*)|
-|--|--|--|
-|Ford|Flex|3|
-|BMW|330i|7|
-|Honda|Civic|9|
-
-
----
-# HAVING
-
-
-|make|model|year|price|
-|--|--|--|
-|Ford|Flex|2012|11,234|
-|Ford|Flex|2013|12,222|
-|Ford|Flex|2012|14,999|
-|BMW|330i|2012|17,999|
-|BMW|330i|2013|18,999|
-|...|...|...|...|
-
-```sql
-SELECT make, model, count(*) c
-FROM car_for_sale
-GROUP BY make, model
-HAVING  c > 7
-```
-
-|Make|Model|Count(*)|
-|--|--|--|
-|Honda|Civic|9|
-
----
-# Ordering Results
-
-`ORDER BY` clause allows for sorting of results
-
-```sql
-... ORDER BY price desc
-```
-```sql
-... ORDER BY price asc
-```
-
-* NULL is considered great than any other value
-
-```sql
-SELECT make, model, count(*) c FROM cars GROUP BY make, model ORDER BY c desc
-```
-```sql
-SELECT make, model, price  FROM cars  ORDER BY price asc
-```
-
-```sql
-SELECT make, model, price  FROM cars  ORDER BY 1, 2, price asc
-// Make, Model, Price
-```
-
-
-
----
-# INSERT
-
-Put data into the database
-
-```sql
-INSERT INTO cars (make, model, year, price) values ('Ford','Focus', 2001,1500);
-```
-
-```sql
-INSERT INTO cars (make, model, year, price) values 
-   ('Ford','Focus', 2001,1500)
-   ,('Honda','Civic', 2005,2250);
-```
-
-```sql
-INSERT INTO expensive_cars(make, model, year, price) 
-   SELECT make,  model, year, price FROM cars WHERE price > 20000;
-```
----
-# UPDATE
-
-Changes data that's in the database.
-
-```sql
-UPDATE t SET f = f + 1 WHERE id = 5;
-```
-
-```sql
-UPDATE t SET description = "This is a new description";
-```
-
----
-# DELETE
-
-Permanently removes data from a database
-
-```sql
-DELETE FROM t WHERE id = 120;
-```
-
-```sql
-DELETE FROM t WHERE id = 120;
-```
-
-```sql
-DELETE  FROM car WHERE make = 'porsche' RETURNING *;
-
-porsche, 911 Turbo, 2003, 23000
-
-```
-
-
-
----
-# TRUNCATE
-
-Deletes ALL the data in a table, leaves the table behind.
-
-```sql
-TRUNCATE TABLE cars;
-```
-
-Really useful on large tables.   Same as 
-```sql
-DELETE FROM cars;
-```
-but much faster since it doesn't delete row by row.
 
 ---
 
 ---
 
 ---
+
+
+
+
+
+
 
 
 
