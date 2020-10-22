@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>INFO 610 - Week 10.5 - Oct 22, 2020</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+/* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+/* Two-column layout */
+      .left-column-half {
+        color: #777;
+        width: 50%;
+        height: 92%;
+        float: left;
+      }
+      .right-column-half {
+        width: 50%;
+        float: right;
+        padding-top: 1em;
+        line-height: .9em;
+      }
+
+    table, td, th {
+        border: 1px solid black;
+        font-size: .9em;
+    }
+
+     li {
+       line-height:2.5em;
+    }
+
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+# 
+
+<div style="text-align:center;font-size: 3em;line-height:3em;"> INFO 610 Fall 2020 </div>
+<div style="text-align:center;font-size: 1.5em;line-height:1.8em;">Week 10.5, Oct 22, 2020</div>
+<div style="text-align:center;font-size: 1em;line-height:1.8em;">Triggers</div>
+<div style="text-align:center;font-size: 1.9em;line-height:3em;">chrisfauerbach.github.io/info610_fall_2020/</div>
+
+---
+# Database Trigger
+
+A database trigger is procedural code that is automatically executed in response to certain events on a particular table or view in a database. 
+
+The trigger is mostly used for maintaining the integrity of the information on the database. 
+
+For example, when a new record (representing a new worker) is added to the employees table, new records should also be created in the tables of the taxes, vacations and salaries. 
+
+Triggers can also be used to log historical data, for example to keep track of employees' previous salaries.
+
+---
+# Example
+
+Let's work through through the example above.
+* When a new record is inserted into the employees table
+ * Insert a record into the taxes_paid table
+ * Insert into the vacations tables
+ * Insert into the salary table
+
+---
+# Tables
+
+```sql
+DROP TABLE IF EXISTS vacation_balance;
+DROP TABLE IF EXISTS salary;
+DROP TABLE IF EXISTS employee;
+CREATE TABLE employee (id serial primary key, 
+       fname varchar, lname varchar, 
+       start_date date, 
+       insert_ts timestamp default now(), 
+       last_update_ts timestamp default now());
+
+CREATE TABLE vacation_balance(employee_id int primary key,
+       year int, vacation_balance int,
+       foreign key (employee_id) REFERENCES employee(id));
+
+CREATE TABLE salary(employee_id int primary key,
+       annual_salary int,
+       effective_ts timestamp default now(),
+       foreign key (employee_id) REFERENCES employee(id));
+```
+
+---
+# Rules
+
+* When an employee is inserted into the employee table
+ * Create a vacation balance of 0
+ * Define an initial salary of 0 effective now
+* For fun make sure the 'last_update_ts' of the employee is changed whenever the row is altered
+
+---
+# Triggers
+
+A database trigger is procedural code that is automatically executed in response to certain events on a particular table or view in a database.
+
+```
+CREATE [ CONSTRAINT ] TRIGGER name { BEFORE | AFTER | INSTEAD OF } { event [ OR ... ] }
+    ON table
+    [ FROM referenced_table_name ]
+    [ NOT DEFERRABLE | [ DEFERRABLE ] { INITIALLY IMMEDIATE | INITIALLY DEFERRED } ]
+    [ FOR [ EACH ] { ROW | STATEMENT } ]
+    [ WHEN ( condition ) ]
+    EXECUTE PROCEDURE function_name ( arguments )
+
+where event can be one of:
+
+    INSERT
+    UPDATE [ OF column_name [, ... ] ]
+    DELETE
+    TRUNCATE
+```
+---
+* Create a vacation balance of 0
+
+* When a new record is inserted into the employees table
+* AFTER event
+* Event == INSERT on employees table
+
+
+```sql
+CREATE TRIGGER trigger_employee_salary
+    BEFORE UPDATE ON employee
+    FOR EACH ROW
+    EXECUTE PROCEDURE add_new_salary();
+
+CREATE TRIGGER trigger_employee_vacation
+    BEFORE UPDATE ON employee
+    FOR EACH ROW
+    EXECUTE PROCEDURE add_new_vacation();
+
+```
+```
+ERROR: function add_new_salary() does not exist
+ERROR: function add_new_vacation() does not exist
+```
+---
+#  Functions
+
+Code that can be executed in the database
+
+Build example to handle our triggers
+
+```sql
+
+
+CREATE OR REPLACE FUNCTION add_new_salary() RETURNS TRIGGER AS $example_table$
+   BEGIN
+      INSERT INTO salary(employee_id, annual_salary)
+      VALUES (new.id,  0);
+      RETURN NEW;
+   END;
+$example_table$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION add_new_vacation() RETURNS TRIGGER AS $example_table$
+   BEGIN
+      INSERT INTO vacation_balance(employee_id, year, vacation_balance)
+      VALUES (new.id, EXTRACT(YEAR FROM NOW()), 0);
+      RETURN NEW;
+   END;
+$example_table$ LANGUAGE plpgsql;
+
+
+```
+
+---
+#  Putting it together
+
+Setup:
+```sql
+SELECT * FROM EMPLOYEE;
+SELECT * FROM SALARY;
+SELECT * FROM VACATION_BALANCE;
+```
+```
+no rows selected
+no rows selected
+no rows selected
+```
+
+```sql
+INSERT  INTO employee(fname, lname, start_date) 
+   VALUES ('Chris', 'Fauerbach', '01-01-2001');
+SELECT * FROM SALARY;
+SELECT * FROM VACATION_BALANCE;
+
+```
+```
+1 row inserted.
+
+employee_id annual_salary effective_ts              
+----------- ------------- ------------------------- 
+3           0             2019-11-19 15:08:21.847554 
+
+employee_id year        vacation_balance 
+----------- ----------- ---------------- 
+3           2019        0                
+```
+---
+# 
+
+---
+# 
+
+---
+# 
+
+---
+# 
+
+---
+# 
+
+
+---
+# 
+
+
+---
+# 
+
+
+---
+#
+
+---
+# 
+
+
+
+
+
+
+
+
+
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
