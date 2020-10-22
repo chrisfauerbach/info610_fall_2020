@@ -52,6 +52,16 @@
      li {
        line-height:2.5em;
     }
+    .remark-code{
+      font-size:14px;
+    }
+    table, td, th {
+        border: 1px solid black;
+        font-size: .9em;
+    }
+code {
+  white-space : pre-wrap !important;
+}
 
     </style>
   </head>
@@ -226,43 +236,93 @@ employee_id year        vacation_balance
 3           2019        0                
 ```
 ---
-# 
+# Special Variables
+
+When triggers are executed, they have access to several special variables that are automatically created.
+
+These are 'global' variables for your procedure.
+
+* Listed on next page.
 
 ---
-# 
 
+```sql
+NEW
+Data type RECORD; variable holding the new database row for INSERT/UPDATE operations in row-level triggers. This variable is NULL in statement-level triggers and for DELETE operations.
+
+OLD
+Data type RECORD; variable holding the old database row for UPDATE/DELETE operations in row-level triggers. This variable is NULL in statement-level triggers and for INSERT operations.
+
+TG_NAME
+Data type name; variable that contains the name of the trigger actually fired.
+
+TG_WHEN
+Data type text; a string of BEFORE, AFTER, or INSTEAD OF, depending on the trigger's definition.
+
+TG_LEVEL
+Data type text; a string of either ROW or STATEMENT depending on the trigger's definition.
+
+TG_OP
+Data type text; a string of INSERT, UPDATE, DELETE, or TRUNCATE telling for which operation the trigger was fired.
+
+TG_RELID
+Data type oid; the object ID of the table that caused the trigger invocation.
+
+TG_TABLE_NAME
+Data type name; the name of the table that caused the trigger invocation.
+
+TG_TABLE_SCHEMA
+Data type name; the name of the schema of the table that caused the trigger 
+invocation.
+
+TG_NARGS
+Data type integer; the number of arguments given to the trigger procedure in the CREATE TRIGGER statement.
+
+TG_ARGV[]
+Data type array of text; the arguments from the CREATE TRIGGER statement. 
+The index counts from 0.  Invalid indexes (less than 0 or greater than or equal to 
+tg_nargs) result in a null value.
+
+
+
+```
 ---
-# 
+# How do we use it?
 
+```sql
+CREATE TABLE emp (
+    empname text,
+    salary integer,
+    last_date timestamp,
+    last_user text
+);
+
+CREATE FUNCTION emp_stamp() RETURNS trigger AS $emp_stamp$
+    BEGIN
+        -- Check that empname and salary are given
+        IF NEW.empname IS NULL THEN
+            RAISE EXCEPTION 'empname cannot be null';
+        END IF;
+        IF NEW.salary IS NULL THEN
+            RAISE EXCEPTION '% cannot have null salary', NEW.empname;
+        END IF;
+
+        -- Who works for us when she must pay for it?
+        IF NEW.salary < 0 THEN
+            RAISE EXCEPTION '% cannot have a negative salary', NEW.empname;
+        END IF;
+
+        -- Remember who changed the payroll when
+        NEW.last_date := current_timestamp;
+        NEW.last_user := current_user;
+        RETURN NEW;
+    END;
+$emp_stamp$ LANGUAGE plpgsql;
+
+CREATE TRIGGER emp_stamp BEFORE INSERT OR UPDATE ON emp
+    FOR EACH ROW EXECUTE PROCEDURE emp_stamp();
+```
 ---
-# 
-
----
-# 
-
-
----
-# 
-
-
----
-# 
-
-
----
-#
-
----
-# 
-
-
-
-
-
-
-
-
-
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
