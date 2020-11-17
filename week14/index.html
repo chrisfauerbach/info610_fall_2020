@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>INFO 610 - Week 14</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+      body 
+      { font-family: 'Droid Serif'; }
+
+      
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-code, .remark-inline-code { font-size: 14px; }
+      i {
+          color: #0000FF;
+      }
+/* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+/* Two-column layout */
+      .left-column-half {
+        color: #777;
+        width: 50%;
+        height: 92%;
+        float: left;
+      }
+      .right-column-half {
+        width: 50%;
+        float: right;
+        padding-top: 1em;
+        line-height: .9em;
+      }
+
+      table {
+        width: 100%;
+        border: 2px solid black;
+        }
+        table, th, td {
+           border: 1px solid black;
+        }
+
+
+    .remark-code{
+      font-size:14px;
+    }
+    table, td, th {
+        border: 1px solid black;
+        font-size: .9em;
+    }
+    code {
+      white-space : pre-wrap !important;
+      font-size: .9em;
+    }
+    .remark-code {
+      font-size: 12px;
+    }
+
+    quote {
+      font-style: italic;
+
+     }
+    </style>
+  </head>
+  <body>
+    <textarea id="source" class: center, middle >
+
+# INFO 610 Fall 2020
+<div style="text-align:center;font-size: 1.5;line-height:1.8em;">Week 14</div>
+<div style="text-align:center;font-size: 1.5;line-height:1.8em;">Nov 17, 2020</div>
+ 
+---
+# Agenda
+
+## Tuesday Fun Day with Relevant Material!
+
+1. Database integration
+2. API Design
+
+
+---
+# Database Integration
+
+* Relational databases (or any other type of database, for the most part) can permanently store data that can be accessed by an application
+* Examples of relational databases:  
+ * MS SQL Server
+ * Oracle
+ * Postgresql
+ * Mysql
+ * MariaDB
+* Python can integrate with any of them.
+
+
+
+## Anyone used a relational database before?
+
+---
+# Python - Database Integration
+
+* Python Database API - DB-API
+* https://docs.python-guide.org/scenarios/db/
+
+* In this section, we'll be using 'sqlite3' as our example, so we don't have external dependencies.
+* SQLite 3 is a disk-based relational database, great for prototyping or small work loads.
+
+* Python's 'sqlite3' module meets the specs of the DB-API 2.0
+
+---
+# Steps to interact with a database
+
+1. Create a connection
+2. Get a 'cursor' (This is what you interact with)
+3. Execute commands (queries, updates, inserts, etc)
+4. Commit your transaction
+5. Close your connection (ALWAYS CLOSE YOUR CONNECTION)
+
+---
+# Before we code
+
+* Database interactions are some of the slowest parts of computing
+
+* Network conectivity is slow
+
+* We'll figure out how to improve performance as we go along
+
+---
+# To the code
+
+```python
+
+# Impor the sqlite3 library
+import sqlite3
+
+# Create a connection to the database
+# this will open or create a file 'example.db'
+# on your system
+conn = sqlite3.connect('example.db')
+
+```
+
+<a href="https://www.sqlite.org/index.html">https://www.sqlite.org/index.html</a>
+
+SQLite is a C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine. SQLite is the most used database engine in the world. SQLite is built into all mobile phones and most computers and comes bundled inside countless other applications that people use every day. More Information...
+
+The SQLite file format is stable, cross-platform, and backwards compatible and the developers pledge to keep it that way through at least the year 2050. SQLite database files are commonly used as containers to transfer rich content between systems and as a long-term archival format for data. There are over 1 trillion (1e12) SQLite databases in active use.
+
+SQLite source code is in the public-domain and is free to everyone to use for any purpose.
+
+---
+# More code
+
+```python
+# Cursor is the 'interactive' method for modifying the db
+# You create a cursor from the connection
+c = conn.cursor()
+
+# Create table - tables store data.
+# Tables will have/can have many 'rows' representing items
+# Tables have columns representing data points.  
+# Rows have 'fields' which is the value in the column
+# That was info610 in 4 bullets
+c.execute('''CREATE TABLE stocks
+             (date text, trans text, symbol text, qty real, price real)''')
+
+# Insert a row of data
+ 
+c.execute("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")
+
+# Save (commit) the changes
+# This ensures that all data hasn't been lost
+conn.commit()
+
+# We will close the connection if we are done with it.
+# If you haven't committed your changes, they will be lost.
+conn.close()
+
+```
+
+---
+# Quick SQL overview
+
+* Query
+* Insert
+* Update
+* Delete
+
+
+## Insert 
+* `insert into [table] ([columns]) values ([values])`
+* e.g.   - `INSERT INTO stocks (date, trans, symbol, qty, price) values ('2020-11-11', 'SELL', 'MKL', 30, 1500.0)`
+
+
+## Query
+* `select [columns] from [table(s)] [WHERE [filter]] [ORDER BY columns]`
+* e.g.   - `SELECT * FROM stocks`
+* e.g.   - `SELECT date, symbol FROM stocks WHERE symbol = 'MKL'`
+
+
+We may skip update/delete for now.
+
+---
+# Create a database for our movies
+
+In the interest of time, let's pick a few columns that are important.
+
+1. id
+2. Title
+3. Original Title
+4. Budget
+5. Homepage
+6. imdb_id
+7. Release Date
+8. Revenue
+9. Runtime
+10. Vote Average
+11. Vote Count
+
+Create Statement to make the table
+
+`CREATE TABLE movies (id int primary key, homepage varchar, imdb_id varchar,
+    release_date date, revenue real, runtime real, vote_average real, 
+    vote_count int);`
+
+
+---
+
+From a software design standpoint, we'll build 4 components.
+1. Create the database - initialize.py (sqlite3)
+2. Insert the data     - load_data.py (pandas, sqlite3)
+3. API server - server.py (flask, sqlite3)
+4. API client - client.py (requests)
+
+---
+# initialize.py
+
+```python
+import sqlite3
+
+def create_database(filename):
+    conn = sqlite3.connect(filename)
+    return conn
+
+
+def create_structure(conn):
+    c = conn.cursor()
+    CREATE_SQL = """
+         CREATE TABLE movies (id int primary key, title varchar, original_title varchar,
+         budget real, homepage varchar, imdb_id varchar,
+         release_date date, revenue real, runtime real, vote_average real,
+         vote_count int);
+    """
+    c.execute(CREATE_SQL)
+
+if __name__ == '__main__':
+    conn = create_database('database.sqlite3.db')
+    create_structure(conn)
+    if conn:
+        conn.close()
+```
+
+### Execute 
+```bash
+➜  src git:(master) ✗ python3 initialize.py
+➜  src git:(master) ✗ file database.sqlite3.db
+database.sqlite3.db: SQLite 3.x database, last written using SQLite version 3028000
+➜  src git:(master) ✗
+```
+
+<a href="./src/initialize.py">initialize.py</a>
+
+---
+# Prep for pandas
+
+I'll be doing this command line, not using Jupyter Notebook
+
+```bash
+$ # I like pipenv
+$ brew install pipenv # or however you do it on your OS
+$ pipenv --python `which python3`
+$ pipenv shell
+$ pipenv install numpy pandas
+$ # Now I have a virtual environment that I can run this code.
+```
+
+### Don't forget to remove these three rows from the CSV file:
+
+ff9qCepilowshEtG2GYWwzt2bs4.jpg
+
+zV8bHuSL6WXoD6FWogP9j4x80bL.jpg 
+
+zaSf5OG7V8X8gqFvly88zDdRm46.jpg 
+
+---
+# load_data.py
+
+```python
+import sqlite3
+import pandas as pd
+
+def load_row(movie):
+    conn = get_database('database.sqlite3.db')
+    c = conn.cursor()
+    LOAD_SQL = """
+        INSERT INTO movies(id, title, original_title, budget, homepage, imdb_id, release_date, revenue, runtime, vote_average, vote_count) values
+                          (?,  ?,     ?,              ?,      ?,        ?,       ?,            ?,       ?,       ?,            ?)
+    """
+    c.execute(LOAD_SQL, (movie['id'], movie['title'], movie['original_title'], movie['budget'],
+                         movie['homepage'], movie['imdb_id'], movie['release_date'], movie['revenue'],
+                         movie['runtime'], movie['vote_average'], movie['vote_count'] ))
+    conn.commit()
+    conn.close()
+
+def get_database(filename):
+    conn = sqlite3.connect(filename)
+    return conn
+
+
+
+if __name__ == "__main__":
+    movies = pd.read_csv("movies_metadata.csv")
+    for k, row in movies.iterrows():
+        load_row(row)
+```
+
+```bash
+✗ python load_data.py
+Traceback (most recent call last):
+  File "/Users/lin138/Documents/Projects/info610_fall_2020/week13/src/load_data.py", line 28, in <module>
+    load_row(row)
+  File "/Users/lin138/Documents/Projects/info610_fall_2020/week13/src/load_data.py", line 13, in load_row
+    c.execute(LOAD_SQL, (movie['id'], movie['title'], movie['original_title'], movie['budget'],
+sqlite3.IntegrityError: UNIQUE constraint failed: movies.id
+```
+This took about 90 seconds on my laptop:
+
+<a href="./src/load_data.py">load_data.py</a>
+
+---
+# Nuts!
+
+Unique key constraints.  Tells me that the source data doesn't really mean 'primary key' unless it's truly a duplicate..   
+
+To fix it, we can add a 'new' primary key (like a UUID , or an integer counter) but for now, let's just trap the exception
+
+```        
+try:
+    load_row(row)
+except:
+    logging.error("Duplicate primary key: %s", (row['id'], ))
+```
+
+I couldn't figure out what they were as far as IDs go, one was a duplicate record, one was not.
+
+
+---
+# Python Code to Query the DB
+
+This is going to teach us a few things in order to build our web API
+
+* When we build an API, we'll have a function call that happens when the HTTP request occurs
+
+* The Flask library will map the request, to the function.   Let's keep that in mind.
+
+```python
+✗ cat first_query.py
+import sqlite3
+import logging
+
+
+def get_database(filename):
+    conn = sqlite3.connect(filename)
+    return conn
+
+def query_rows():
+    conn = get_database('database.sqlite3.db')
+    c = conn.cursor()
+    SELECT_QUERY = " SELECT * FROM movies LIMIT 5; "
+    result = c.execute(SELECT_QUERY)
+    print(result)
+    print(type(result))
+    for movie in result:
+        print(type(movie), movie)
+    conn.commit()
+    conn.close()
+
+if __name__ == "__main__":
+    query_rows()
+```
+<a href="first_query.py">first_query.py</a>
+
+---
+# first_query.py
+
+```bash
+✗ python first_query.py
+<sqlite3.Cursor object at 0x10181a260>
+<class 'sqlite3.Cursor'>
+<class 'tuple'> (862, 'Toy Story', 'Toy Story', 30000000.0, 'http://toystory.disney.com/toy-story', 'tt0114709', '1995-10-30', 373554033.0, 81.0, 7.7, 5415)
+<class 'tuple'> (8844, 'Jumanji', 'Jumanji', 65000000.0, None, 'tt0113497', '1995-12-15', 262797249.0, 104.0, 6.9, 2413)
+<class 'tuple'> (15602, 'Grumpier Old Men', 'Grumpier Old Men', 0.0, None, 'tt0113228', '1995-12-22', 0.0, 101.0, 6.5, 92)
+<class 'tuple'> (31357, 'Waiting to Exhale', 'Waiting to Exhale', 16000000.0, None, 'tt0114885', '1995-12-22', 81452156.0, 127.0, 6.1, 34)
+<class 'tuple'> (11862, 'Father of the Bride Part II', 'Father of the Bride Part II', 0.0, None, 'tt0113041', '1995-02-10', 76578911.0, 106.0, 5.7, 173)
+```
+
+---
+# Return Type
+
+The return type, by default, is a "Cursor" object.   This object has lots of database specific things in it.
+
+When we iterate (for loop) on the cursor, we get a set of 'tuples'.
+
+Tuples are a great, immutable data type, but here's how we "get" the titles:
+
+```python
+    for movie in result:
+        print("Found Title: {}".format(movie[1]))
+```
+
+How do we know which index in the tuple will be which field, we 'selected *'?
+
+Trial and error is no fun.
+
+<a href="second_query.py">second_query.py</a>
+
+Let's use a map
+
+---
+# Row Factory
+
+We can override the default 'row factory' with a 'Row' factory so we can access items by column name.
+
+```python
+def get_database(filename):
+    conn = sqlite3.connect(filename)
+    conn.row_factory = sqlite3.Row
+    return conn
+```
+
+```python
+    for movie in result:
+        print("Found Title: {}".format(movie["title"]))
+```
+
+This allows you to change the order of columns in the query without changing your subsequent code.
+
+<a href="third_query.py">third_query.py</a>
+
+---
+# Parameterizing Queries
+
+When we query records in a database, we typically want to 'find' items based on certain criteria.  
+
+Whether it's a 'description' or 'title' in our Movies , or by ID to get a specific item.  
+
+Here are a few example functions:
+
+
+
+---
+```python
+
+import sqlite3
+import logging
+
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+
+def get_database(filename):
+    conn = sqlite3.connect(filename)
+    # Changed for a real dictionary!
+    conn.row_factory = dict_factory
+    return conn
+
+def search_title(descr):
+    results = []
+    conn = get_database('database.sqlite3.db')
+    c = conn.cursor()
+    parm = "%{}%".format(descr)
+    SELECT_QUERY = " SELECT * FROM movies WHERE title like ? LIMIT 5 "
+    result = c.execute(SELECT_QUERY, (parm,))
+    for movie in result:
+        results.append(movie)
+    conn.commit()
+    conn.close()
+    return results
+
+def search_id(id):
+    conn = get_database('database.sqlite3.db')
+    c = conn.cursor()
+    SELECT_QUERY = " SELECT * FROM movies WHERE id = ?;"
+    result = c.execute(SELECT_QUERY, (id, ))
+    movie = result.fetchone()
+    conn.commit()
+    conn.close()
+    return movie
+
+if __name__ == "__main__":
+    my_movie = search_id(15602)
+    print("15602")
+    print(my_movie)
+    my_movie = search_id(11862)
+    print("11862")
+    print(my_movie)
+
+    my_movies = search_title('grumpier')
+    print("grumpier")
+    for movie in my_movies:
+        print(f"{movie['id']}: {movie['title']} ")
+
+    my_movies = search_title('star')
+    print("star")
+    for movie in my_movies:
+        print(f"{movie['id']}: {movie['title']} ")
+
+
+```
+
+---
+# Too much code
+
+Lots of repetition.  The database connection code is repeated over and over.. and will be for every 'endpoint' or function we create.
+
+What if this:
+```python
+def search_title(descr):
+    results = []
+    conn = get_database('database.sqlite3.db')
+    c = conn.cursor()
+    parm = "%{}%".format(descr)
+    SELECT_QUERY = " SELECT * FROM movies WHERE title like ? LIMIT 5 "
+    result = c.execute(SELECT_QUERY, (parm,))
+    for movie in result:
+        results.append(movie)
+    conn.commit()
+    conn.close()
+    return results
+```
+
+Could become:
+```python
+@db
+def search_title(descr, c=None):
+    results = []
+    parm = "%{}%".format(descr)
+    SELECT_QUERY = " SELECT * FROM movies WHERE title like ? LIMIT 5 "
+    result = c.execute(SELECT_QUERY, (parm,))
+    for movie in result:
+        results.append(movie)
+    return results
+```
+
+That example doesn't remove much code, but, it removes the boilerplate stuff.  We can use a 'decorator' to make this happen.
+
+---
+# Decorator
+
+decorators wrap a function, modifying its behavior.
+
+Notice this:
+```python
+def search_title(descr):
+```
+becomes
+```python
+@db
+def search_title(descr, c=None):
+```
+
+'db' is the decorator.  We use the @ symbol to show that it's going to 'wrap' the function
+
+---
+# Functions
+
+Things to know.  Functions are 'first class objects'. We can pass a function around as a variable.
+
+e.g.:
+
+```python
+def my_function():
+   pass
+
+f = my_function
+f()
+```
+
+That calls 'my_function' but with an 'alias' of `f`.
+
+
+---
+# Back to decorators
+
+My goal with the `db` function is to be able to inject the database cursor for any method that needs it.  
+
+That `abstracts` the details of the database away from that function.  
+
+This helps with:
+* cleaner code
+* ability to test easier
+* hides changes to databases within one block of code.
+
+Let's look at the `db` decorator
+
+---
+# @db
+
+```python
+from functools import wraps
+.
+.
+.
+
+def db(func):
+    @wraps(func)
+    def wrapper_to_add(*args, **kwargs):
+        cur = None
+        conn = None
+        try:
+            conn = get_database('database.sqlite3.db')
+            conn.row_factory = dict_factory
+            cur = conn.cursor()
+            a = func(*args, c=cur, **kwargs)
+            logging.debug("Func returned a: ", a)
+            conn.commit()
+
+            return a
+        except:
+            logging.exception("Exception while processing. Will Attempt to Rollback")
+            try:
+                if conn:  conn.rollback()
+            except:
+                logging.exception("Had an issue rolling back.")
+                traceback.print_exc(file=sys.stdout)
+        finally:
+            if cur:  cur.close()
+            if conn:  conn.close()
+    return wrapper_to_add
+
+```
+---
+# Why did we do that again?
+Imagine I want to:
+
+* change the database filename
+* Start using a Postgresql database
+* Use an in memory database for testing.
+* Use a different database in testing vs production
+ 
+
+
+---
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
