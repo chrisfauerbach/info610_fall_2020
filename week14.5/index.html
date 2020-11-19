@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>INFO 610 - Week 14.5</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+      body 
+      { font-family: 'Droid Serif'; }
+
+      
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-code, .remark-inline-code { font-size: 14px; }
+      i {
+          color: #0000FF;
+      }
+/* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+/* Two-column layout */
+      .left-column-half {
+        color: #777;
+        width: 50%;
+        height: 92%;
+        float: left;
+      }
+      .right-column-half {
+        width: 50%;
+        float: right;
+        padding-top: 1em;
+        line-height: .9em;
+      }
+
+      table {
+        width: 100%;
+        border: 2px solid black;
+        }
+        table, th, td {
+           border: 1px solid black;
+        }
+
+
+    .remark-code{
+      font-size:14px;
+    }
+    table, td, th {
+        border: 1px solid black;
+        font-size: .9em;
+    }
+    code {
+      white-space : pre-wrap !important;
+      font-size: .9em;
+    }
+    .remark-code {
+      font-size: 12px;
+    }
+
+    quote {
+      font-style: italic;
+
+     }
+    </style>
+  </head>
+  <body>
+    <textarea id="source" class: center, middle >
+
+# INFO 610 Fall 2020
+<div style="text-align:center;font-size: 1.5;line-height:1.8em;">Week 14.5</div>
+<div style="text-align:center;font-size: 1.5;line-height:1.8em;">Nov 19, 2020</div>
+ 
+---
+# Agenda
+
+1. Exam Potentials
+2. Alter Table
+
+---
+# Exam Potentials
+
+* Relations/Tables
+* Columns
+* Records
+* Fields
+* Relationships
+* Reference Tables
+* CREATE, ALTER Tables (tonight)
+* SELECT, INSERT, DELETE, UPDATE (covering more next week)
+* JOINS
+ * INNER JOIN
+ * OUTER JOIN
+* Primary Key
+* Foreign Key
+* Unique Constraint
+* Views, Materialized Views
+* Constraints
+* Triggers
+* Functions
+* DROP / TRUNCATE Table
+* Subqueries
+
+---
+# Alter Table
+
+https://www.postgresql.org/docs/10/sql-altertable.html
+
+* Rename Column
+* Rename Constraints
+* Rename Table
+* Change Defaults
+* Change Identity
+* Triggers
+* etc.
+
+ALTER TABLE changes the definition of an existing table.
+
+---
+
+# Columns
+
+* ADD COLUMN [ IF NOT EXISTS ]
+* DROP COLUMN [ IF EXISTS ]
+* SET DATA TYPE
+* SET/DROP DEFAULT
+* SET/DROP NOT NULL
+
+---
+# Examples - Column
+
+```sql
+ALTER TABLE distributors ADD COLUMN address varchar(30);
+```
+
+```sql
+ALTER TABLE distributors DROP COLUMN address;
+```
+
+```sql
+ALTER TABLE distributors
+    ALTER COLUMN address TYPE varchar(80),
+    ALTER COLUMN name TYPE varchar(100);
+```
+
+```sql
+ALTER TABLE distributors RENAME COLUMN address TO city;
+```
+
+---
+# Examples - Table
+
+```sql
+ALTER TABLE distributors RENAME TO suppliers;
+```
+
+```sql
+ALTER TABLE distributors RENAME CONSTRAINT zipchk TO zip_check;
+```
+
+```sql
+ALTER TABLE distributors ALTER COLUMN street SET NOT NULL;
+```
+
+```sql
+ALTER TABLE distributors ADD CONSTRAINT zipchk CHECK (char_length(zipcode) = 5);
+```
+
+
+
+---
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
